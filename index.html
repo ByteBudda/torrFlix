@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>torrFLIX Premium</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #0a0a0a; --text: #ffffff; --accent: #e50914;
+            --header-bg: rgba(10, 10, 10, 0.9);
+            --card-bg: #141414;
+            --glass-border: rgba(255, 255, 255, 0.12);
+            --btn-gray: rgba(255, 255, 255, 0.1);
+            --modal-bg: #181818;
+            --input-bg: rgba(255, 255, 255, 0.07);
+            --t-row-bg: rgba(255, 255, 255, 0.03);
+            --size-bg: #333;
+        }
+
+        [data-theme="light"] {
+            --bg: #f5f5f7; --text: #1a1a1a; --accent: #e50914;
+            --header-bg: rgba(245, 245, 247, 0.9);
+            --card-bg: #ffffff;
+            --glass-border: rgba(0, 0, 0, 0.1);
+            --btn-gray: rgba(0, 0, 0, 0.05);
+            --modal-bg: #ffffff;
+            --input-bg: rgba(0, 0, 0, 0.05);
+            --t-row-bg: rgba(0, 0, 0, 0.02);
+            --size-bg: #e2e2e7;
+        }
+
+        * { box-sizing: border-box; transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1); outline: none; }
+        body { background: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; overflow-x: hidden; }
+
+        header { 
+            position: fixed; top: 0; width: 100%; height: 70px; z-index: 1000;
+            background: var(--header-bg); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex; align-items: center; justify-content: space-between; padding: 0 4%;
+        }
+        .logo { color: var(--accent); font-weight: 900; font-size: 24px; cursor: pointer; text-transform: uppercase; margin-right: 20px; }
+        .logo span { color: var(--text); }
+        .h-left { display: flex; align-items: center; gap: 10px; }
+        
+        .nav-item { cursor: pointer; opacity: 0.6; font-weight: 700; font-size: 14px; padding: 10px 15px; border-radius: 8px; color: var(--text); border: none; background: none; text-decoration: none; }
+        .nav-item.active { opacity: 1; background: var(--accent); color: #fff; }
+        .nav-item:focus { box-shadow: 0 0 0 2px var(--accent); opacity: 1; }
+
+        .h-center { flex-grow: 1; display: flex; justify-content: center; }
+        .ui-input { 
+            width: 100%; max-width: 400px; background: var(--input-bg); border: 1px solid var(--glass-border); 
+            color: var(--text); padding: 12px 20px; border-radius: 20px; font-size: 14px;
+        }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; padding: 100px 4% 40px; }
+        .card { 
+            background: var(--card-bg); border: 1px solid var(--glass-border); border-radius: 10px; 
+            overflow: hidden; cursor: pointer; position: relative; box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .card img { width: 100%; aspect-ratio: 2/3; object-fit: cover; }
+        .card-info { padding: 12px; }
+        .card-title { font-weight: 700; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-bottom: 4px; }
+        .card-meta { font-size: 12px; opacity: 0.6; font-weight: 600; }
+
+        .card:focus, .card:hover { transform: scale(1.05); border-color: var(--accent); z-index: 5; box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+
+        #modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 2000; overflow-y: auto; padding: 20px; }
+        .m-content { 
+            max-width: 1100px; margin: 20px auto; background: var(--modal-bg); border-radius: 15px; 
+            overflow: hidden; display: block; border: 1px solid var(--glass-border); color: var(--text); 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.5);
+        }
+        
+        .m-header-section { display: flex; padding: 30px; gap: 30px; border-bottom: 1px solid var(--glass-border); }
+        .m-left { width: 220px; flex-shrink: 0; }
+        .m-left img { width: 100%; border-radius: 8px; box-shadow: 0 10px 20px rgba(0,0,0,0.4); }
+        
+        .m-right { flex-grow: 1; display: flex; flex-direction: column; gap: 15px; }
+        #mTitle { margin: 0; font-size: 36px; font-weight: 900; letter-spacing: -1px; line-height: 1.1; }
+        #mDetails { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; font-size: 14px; font-weight: 700; opacity: 0.7; }
+        #mDesc { font-size: 16px; line-height: 1.6; opacity: 0.8; margin: 0; max-height: 200px; overflow-y: auto; padding-right: 10px; }
+        
+        .btn-trailer { background: var(--text); color: var(--bg); padding: 12px 24px; border-radius: 6px; font-weight: 800; cursor: pointer; border: none; font-size: 13px; display: none; width: fit-content; text-transform: uppercase; }
+        .btn-trailer:hover { background: var(--accent); color: #fff; }
+
+        .t-section { padding: 30px; background: rgba(0,0,0,0.05); }
+        .t-list { display: flex; flex-direction: column; gap: 8px; }
+        .t-row { 
+            background: var(--t-row-bg); border: 1px solid var(--glass-border); 
+            padding: 15px 20px; border-radius: 10px; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+        }
+        .t-row:focus-within { border-color: var(--accent); background: var(--input-bg); }
+        .t-name { font-size: 13px; font-weight: 600; opacity: 0.9; flex-grow: 1; line-height: 1.4; }
+        
+        .t-info-box { display: flex; align-items: center; gap: 15px; flex-shrink: 0; }
+        .t-size { background: var(--size-bg); color: var(--text); padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: 800; }
+        .seed { color: #46d369; font-weight: 800; font-size: 12px; min-width: 50px; text-align: right; }
+        
+        .btn-group { display: flex; gap: 8px; }
+        .btn-action { background: var(--btn-gray); color: var(--text); border: 1px solid var(--glass-border); padding: 10px 18px; border-radius: 6px; font-size: 11px; font-weight: 800; cursor: pointer; text-decoration: none; text-transform: uppercase; }
+        .btn-action:focus, .btn-action:hover { background: var(--accent); color: #fff; border-color: var(--accent); transform: translateY(-2px); }
+
+        #video-player { display: none; width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 10px; overflow: hidden; margin-top: 10px; border: 1px solid var(--glass-border); }
+
+        @media (max-width: 800px) {
+            .m-header-section { flex-direction: column; padding: 20px; gap: 20px; align-items: center; text-align: center; }
+            .m-left { width: 180px; }
+            .t-row { flex-direction: column; align-items: flex-start; gap: 12px; }
+            .t-info-box { width: 100%; justify-content: space-between; }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+
+<header>
+    <div class="h-left">
+        <div class="logo" onclick="location.reload()">torr<span>FLIX</span></div>
+        <button class="nav-item active" id="btn-movie" tabindex="0" onclick="setType('movie')">Кино</button>
+        <button class="nav-item" id="btn-tv" tabindex="0" onclick="setType('tv')">Сериалы</button>
+    </div>
+    <div class="h-center">
+        <input type="text" id="sI" class="ui-input" placeholder="Поиск (RU / EN)..." tabindex="0">
+    </div>
+    <div class="h-right" style="display:flex; gap:12px; align-items:center;">
+        <select id="gS" class="ui-input" style="width: auto; padding: 5px 10px; border-radius: 10px;" tabindex="0"><option value="">Жанры</option></select>
+        <button class="nav-item" tabindex="0" onclick="toggleTheme()" style="font-size: 18px; padding: 5px;">🌓</button>
+    </div>
+</header>
+
+<div id="grid" class="grid"></div>
+
+<div id="modal" onclick="if(event.target==this) closeM()">
+    <div class="m-content">
+        <div class="m-header-section">
+            <div class="m-left"><img id="mPosterImg" src=""></div>
+            <div class="m-right">
+                <h1 id="mTitle"></h1>
+                <div id="mDetails"></div>
+                <p id="mDesc"></p>
+                <div class="m-btns">
+                    <button id="btnTr" class="btn-trailer" onclick="toggleTrailer()" tabindex="0">СМОТРЕТЬ ТРЕЙЛЕР</button>
+                </div>
+                <div id="video-player"></div>
+            </div>
+        </div>
+        
+        <div class="t-section">
+            <h3 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 900; color: var(--accent);">Доступные раздачи</h3>
+            <div id="mTorr" class="t-list"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let page = 1, type = 'movie', query = '', genre = '', loading = false, more = true, currentVid = '';
+
+    function toggleTheme() {
+        const t = document.body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', t);
+        localStorage.setItem('theme', t);
+    }
+    if(localStorage.getItem('theme')) document.body.setAttribute('data-theme', localStorage.getItem('theme'));
+
+    // D-Pad
+    document.addEventListener('keydown', (e) => {
+        const focusable = Array.from(document.querySelectorAll('.card, .nav-item, .ui-input, .btn-action, .btn-trailer, select'));
+        const cur = document.activeElement;
+        let idx = focusable.indexOf(cur);
+        if(idx === -1) return;
+        const cols = Math.floor(document.getElementById('grid').offsetWidth / 180);
+        switch(e.key) {
+            case 'ArrowRight': if(idx < focusable.length-1) focusable[idx+1].focus(); break;
+            case 'ArrowLeft': if(idx > 0) focusable[idx-1].focus(); break;
+            case 'ArrowDown': if(idx + cols < focusable.length) focusable[idx+cols].focus(); break;
+            case 'ArrowUp': if(idx - cols >= 0) focusable[idx-cols].focus(); break;
+            case 'Enter': cur.click(); break;
+            case 'Escape': closeM(); break;
+        }
+    });
+
+    window.onscroll = () => { if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 800) load(); };
+
+    async function load(isNew = false) {
+        if (loading || !more) return;
+        loading = true;
+        if (isNew) { page = 1; document.getElementById('grid').innerHTML = ''; more = true; }
+        let url = query ? `/api/search/all?query=${encodeURIComponent(query)}&page=${page}` : 
+                  genre ? `/api/discover/${type}/${genre}?page=${page}` : 
+                  `/api/${type}/category?cat=popular&page=${page}`;
+        try {
+            const r = await fetch(url);
+            const d = await r.json();
+            if (!d.results?.length) { more = false; loading = false; return; }
+            d.results.forEach(m => {
+                if (!m.poster_url) return;
+                const el = document.createElement('div');
+                el.className = 'card'; el.tabIndex = 0;
+                const year = (m.release_date || m.first_air_date || '').split('-')[0];
+                el.innerHTML = `<img src="${m.poster_url}"><div class="card-info"><div class="card-title">${m.title || m.name}</div><div class="card-meta">★ ${m.vote_average?.toFixed(1)} | ${year}</div></div>`;
+                el.onclick = () => openM(m);
+                document.getElementById('grid').appendChild(el);
+            });
+            page++; loading = false;
+        } catch(e) { loading = false; }
+    }
+
+    async function openM(m) {
+        document.getElementById('modal').style.display = 'block';
+        document.body.style.overflow = 'hidden';
+        
+        // Сброс состояния
+        document.getElementById('mPosterImg').src = m.poster_url;
+        document.getElementById('mTitle').innerText = m.title || m.name;
+        document.getElementById('mDesc').innerText = m.overview || "Описание отсутствует.";
+        document.getElementById('btnTr').style.display = 'none';
+        document.getElementById('video-player').style.display = 'none';
+        document.getElementById('video-player').innerHTML = '';
+        currentVid = '';
+
+        const year = (m.release_date || m.first_air_date || '').split('-')[0];
+        document.getElementById('mDetails').innerHTML = `<span>★ ${m.vote_average?.toFixed(1)}</span> <span>${year}</span> <span style="text-transform:uppercase">${type === 'movie' ? 'Фильм' : 'Сериал'}</span>`;
+        
+        document.getElementById('mTorr').innerHTML = '<div style="opacity:0.5; padding:20px;">Поиск раздач в Jackett...</div>';
+
+        // Запрос трейлера
+        fetch(`/api/trailer/${m.media_type || type}/${m.id}`).then(r=>r.json()).then(d => {
+            if (d.key) {
+                currentVid = d.key;
+                document.getElementById('btnTr').style.display = 'inline-block';
+            }
+        });
+
+        // Запрос торрентов
+        const title = m.title || m.name;
+        const orig = m.original_title || m.original_name || "";
+        const r = await fetch(`/api/search/torrents?title=${encodeURIComponent(title)}&orig_title=${encodeURIComponent(orig)}`);
+        const ts = await r.json();
+        
+        document.getElementById('mTorr').innerHTML = ts.map(t => `
+            <div class="t-row">
+                <div class="t-name">${t.Title}</div>
+                <div class="t-info-box">
+                    <span class="t-size">${(t.Size/1024/1024/1024).toFixed(2)} GB</span>
+                    <span class="seed">▲ ${t.Seeders}</span>
+                    <div class="btn-group">
+                        <a href="${t.Details}" target="_blank" class="btn-action" tabindex="0">ИНФО</a>
+                        <a href="${t.Link}" class="btn-action" tabindex="0" onclick="event.preventDefault(); window.location.href='/api/play?link='+encodeURIComponent(this.getAttribute('href'))">СМОТРЕТЬ</a>
+                    </div>
+                </div>
+            </div>
+        `).join('') || '<div style="padding:20px; color:var(--accent); font-weight:700;">Раздач не найдено.</div>';
+    }
+
+    function toggleTrailer() {
+        const v = document.getElementById('video-player');
+        if (v.style.display === 'block') { v.style.display = 'none'; v.innerHTML = ''; }
+        else {
+            v.style.display = 'block';
+            v.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${currentVid}?autoplay=1" frameborder="0" allowfullscreen></iframe>`;
+        }
+    }
+
+    function setType(t) {
+        type = t; query = ''; genre = '';
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.getElementById('btn-'+t).classList.add('active');
+        updateGenres(); load(true);
+    }
+
+    function updateGenres() {
+        fetch(`/api/genres/${type}`).then(r=>r.json()).then(d => {
+            const s = document.getElementById('gS');
+            s.innerHTML = '<option value="">Жанры</option>';
+            if(d.genres) d.genres.forEach(g => { s.innerHTML += `<option value="${g.id}">${g.name}</option>`; });
+        });
+    }
+
+    function closeM() { document.getElementById('modal').style.display='none'; document.body.style.overflow='auto'; }
+    document.getElementById('sI').oninput = (e) => { clearTimeout(window.sT); window.sT = setTimeout(() => { query = e.target.value; load(true); }, 700); };
+    document.getElementById('gS').onchange = (e) => { genre = e.target.value; load(true); };
+
+    updateGenres(); load();
+</script>
+</body>
+</html>

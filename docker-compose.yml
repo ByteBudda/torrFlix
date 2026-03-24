@@ -1,0 +1,15 @@
+version: '3.8'
+
+services:
+  torrflix:
+    build: .
+    container_name: torrflix-app
+    restart: always
+    ports:
+      - "8800:8800"
+    environment:
+      - ADMIN_USER=admin     # Логин для входа в /admin
+      - ADMIN_PASS=pass777  # ПАРОЛЬ (обязательно смени его!)
+    volumes:
+      - ./config.json:/app/config.json
+      - ./cache_img:/app/cache_img

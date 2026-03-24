@@ -1,0 +1,10 @@
+# Виртуальное окружение Python (если создавал локально)
+__pycache__/
+*.pyc
+venv/
+.env
+config.json
+cache_img/
+5yAzhzc7
+5yAzhzc7.pub
+.env

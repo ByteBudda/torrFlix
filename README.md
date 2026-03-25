@@ -1,4 +1,4 @@
-<img src="https://github.com/ByteBudda/torrFlix/blob/main/IMG_20260325_061928_899.jpg?raw=true" width="400" alt="Описание">
+<img src="https://github.com/ByteBudda/torrFlix/blob/main/IMG_20260325_061928_899.jpg?raw=true" width="400" alt="скриншот">
 
 # 🎬 TorrFLIX - Personal Streaming Hub
 

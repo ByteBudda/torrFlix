@@ -1,43 +1,62 @@
-<img src="https://github.com/ByteBudda/torrFlix/blob/main/IMG_20260325_061928_899.jpg?raw=true" width="400" alt="скриншот">
 
-# 🎬 TorrFLIX - Personal Streaming Hub
+# 🎬 TorrFLIX
 
-Легкий и быстрый медиа-комбайн для стриминга торрентов напрямую в браузер. Интеграция с TMDB для поиска и Jackett для поиска раздач.
+<p align="center">
+  <img src="https://github.com/ByteBudda/torrFlix/blob/main/IMG_20260325_061928_899.jpg?raw=true" width="600" alt="TorrFLIX Preview">
+</p>
 
-## 🚀 Быстрый старт (Docker)
+**TorrFLIX** — это легковесный и стильный медиа-комбайн для стриминга торрентов напрямую в ваш браузер. Забудьте о скачивании файлов: находите кино, выбирайте раздачу и смотрите мгновенно.
 
-1. **Клонируйте репозиторий:**
-   ```
-   git clone https://github.com/ByteBudda/torrFlix.git
-   cd torrFlix
-`
-###
+---
 
- * Настройте конфиг:
-   Создайте файл config.json в корневой папке:
+## 🔥 Основные фишки
 
+* **⚡️ Мгновенный стриминг:** Просмотр торрент-видео без полного скачивания на диск.
+* **🎨 Атмосферный UI:** Глубокая темная тема, адаптивная сетка постеров и интуитивно понятный интерфейс.
+* **🔍 Умный поиск:** Интеграция с **TMDB API** для метаданных (описания, рейтинги) и **Jackett** для поиска по сотням трекеров.
+* **🐳 Docker Ready:** Разворачивается одной командой в изолированном контейнере.
+* **🔐 Админ-панель:** Встроенное управление конфигурацией (API ключи, настройки прокси) прямо через браузер.
+
+---
+
+## 🛠 Технологический стек
+
+* **Backend:** Python 3.10 + Flask
+* **Frontend:** HTML5, CSS3, Modern JS
+* **Search Engine:** Jackett API & TMDB API
+* **Infrastructure:** Docker & Docker Compose
+
+---
+
+## 🚀 Быстрый старт
+
+### 1. Подготовка
+Убедитесь, что у вас установлены **Docker** и **Docker Compose**.
+
+### 2. Установка
+```bash
+git clone [https://github.com/ByteBudda/torrFlix.git](https://github.com/ByteBudda/torrFlix.git)
+cd torrFlix
 ```
-{
-  "tmdb_api_key": "ВАШ_TMDB_KEY",
-  "jackett_url": "http://IP_СЕРВЕРА:9117",
-  "jackett_api_key": "ВАШ_JACKETT_KEY"
-}
+3. Запуск
+Просто поднимите контейнер:
 ```
- * Запустите контейнер:
- * ```
-   docker compose up -d --build
-`
- * Доступ:
-   * Главная: http://localhost:8800
-   * Админка: http://localhost:8800/admin (логин: admin, пароль: pass777)
-   * 
-🛠 Технологии
- * Backend: Python (Flask)
- * Frontend: HTML5, CSS3 (Atmospheric Dark UI)
- * Infrastructure: Docker & Docker Compose
- * API: TMDB API, Jackett API
+docker compose up -d --build
+```
+5. Настройка
+После запуска перейдите в админ-панель по адресу http://ваш-ip:8800/admin и укажите свои ключи:
+ * TMDB API Key (можно взять на themoviedb.org)
+ * Jackett URL & API Key (ваш локальный или удаленный инстанс Jackett)
+📦 Структура проекта
+ * server.py — Сердце проекта, логика стриминга и API.
+ * index.html — Динамический фронтенд.
+ * docker-compose.yml — Конфигурация для быстрого развертывания.
+ * config.json — Все настройки (автоматически игнорируется гитом для безопасности).
 🛡 Безопасность
-Файл config.json и кэш изображений добавлены в .gitignore. Никогда не пушьте свои API-ключи в публичный доступ!
-Developed by ByteBudda
+Проект поставляется с настроенным .gitignore. Ваши API ключи и SSH ключи никогда не попадут в публичный репозиторий.
+<p align="center">
+<i>Developed with ❤️ by <b>ByteBudda</b></i>
+</p>
 
+-----
 

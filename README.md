@@ -1,3 +1,5 @@
+<img src="https://github.com/ByteBudda/torrFlix/blob/main/IMG_20260325_061928_899.jpg?raw=true" width="400" alt="Описание">
+
 # 🎬 TorrFLIX - Personal Streaming Hub
 
 Легкий и быстрый медиа-комбайн для стриминга торрентов напрямую в браузер. Интеграция с TMDB для поиска и Jackett для поиска раздач.
